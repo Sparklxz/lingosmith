@@ -1,0 +1,152 @@
+<html>
+ <head>  
+ </head> 
+ <body> 
+  <title>Lingosmith - Language Translator</title> 
+  <style>
+    body {
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .next-button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .next-button:hover {
+      background-color: #45a049;
+    }
+
+    .settings-buttons {
+      display: flex;
+      justify-content: center;
+    }
+
+    .settings-button {
+      background-color: #f2f2f2;
+      color: #333;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    .settings-button:hover {
+      background-color: #e2e2e2;
+    }
+  </style> 
+  <div class="container"> 
+   <h1>Language Translator</h1> 
+   <form> 
+    <div class="form-group"> 
+     <label for="from-language">What language are you translating from?</label> 
+     <input type="text" id="from-language" placeholder="Enter the language you are translating from"> 
+    </div> 
+    <div class="form-group"> 
+     <label for="to-language">What language are you translating to?</label> 
+     <input type="text" id="to-language" placeholder="Enter the language you are translating to"> 
+    </div> 
+   </form> 
+   <div id="settings-question" class="form-group" style="display: none;"> 
+    <label for="settings-option">Do you want basic settings or advanced settings?</label> 
+    <div class="settings-buttons"> 
+     <button class="settings-button" id="basic-settings-button">Basic</button> 
+     <button class="settings-button" id="advanced-settings-button">Advanced</button> 
+    </div> 
+   </div> 
+  </div> 
+  <button class="next-button" onclick="nextClicked()">Next</button> 
+  <script>
+    function nextClicked() {
+      var fromLanguage = document.getElementById('from-language').value;
+      var toLanguage = document.getElementById('to-language').value;
+
+      if (fromLanguage === "" || toLanguage === "") {
+        alert("Please fill in both language fields.");
+        return;
+      }
+
+      // Use the values of fromLanguage and toLanguage as variables for further processing
+      console.log("From Language:", fromLanguage);
+      console.log("To Language:", toLanguage);
+
+      // Hide the initial form
+      document.querySelector('.container form').style.display = 'none';
+
+      // Show the settings question
+      var settingsQuestion = document.getElementById('settings-question');
+      settingsQuestion.style.display = 'block';
+
+      // Disable the next button
+      document.querySelector('.next-button').disabled = true;
+    }
+
+    document.getElementById('basic-settings-button').addEventListener('click', function() {
+      var basic = true;
+      var advanced = false;
+
+      console.log("Basic Settings:", basic);
+      console.log("Advanced Settings:", advanced);
+
+      // Enable the next button
+      document.querySelector('.next-button').disabled = false;
+
+      // Redirect to the translator page
+      window.location.href = "translator.html";
+    });
+
+    document.getElementById('advanced-settings-button').addEventListener('click', function() {
+      var basic = false;
+      var advanced = true;
+
+      console.log("Basic Settings:", basic);
+      console.log("Advanced Settings:", advanced);
+
+      // Enable the next button
+      document.querySelector('.next-button').disabled = false;
+
+      // Redirect to the translator page
+      window.location.href = "translator.html";
+    });
+  </script>   
+ </body>
+</html>
