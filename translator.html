@@ -1,0 +1,318 @@
+<html>
+ <head>  
+ </head> 
+ <body> 
+  <title>Lingosmith - Add Words</title> 
+  <style>
+    body {
+      background-color: #f2f2f2;
+      margin: 0;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .menu-button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .menu-button:hover {
+      background-color: #45a049;
+    }
+
+    .word-input {
+      margin-top: 20px;
+    }
+
+    .word-input label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .word-input input[type="text"] {
+      width: 300px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .add-word-button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .add-word-button:hover {
+      background-color: #45a049;
+    }
+
+    .word-list {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .word-list-item {
+      margin-bottom: 5px;
+    }
+
+    .settings-section {
+      margin-top: 30px;
+    }
+
+    .settings-option {
+      margin-bottom: 10px;
+    }
+
+    .check-button {
+      margin-right: 10px;
+    }
+
+    .dropdown {
+      margin-bottom: 10px;
+    }
+
+    .number-input {
+      margin-top: 10px;
+    }
+
+    .number-input label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .number-input input[type="number"] {
+      width: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .word-input-group {
+      margin-top: 20px;
+    }
+
+    .share-button {
+      background-color: #ff0000;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .share-button:hover {
+      background-color: #cc0000;
+    }
+  </style> 
+  <div class="container"> 
+   <div class="menu"> 
+    <button class="menu-button">Words</button> 
+    <button class="menu-button" onclick="toggleSettings()">Settings</button> 
+   </div> 
+   <div class="word-input"> 
+    <label for="from-language">From Language: <span id="from-language-value"></span></label> 
+    <input type="text" id="from-language" placeholder="Enter word in from language"> 
+   </div> 
+   <div class="word-input"> 
+    <label for="to-language">To Language: <span id="to-language-value"></span></label> 
+    <input type="text" id="to-language" placeholder="Enter word in to language"> 
+   </div> 
+   <button class="add-word-button" onclick="addWord()">Add Word</button> 
+   <div class="word-list"> 
+    <h3>Word List</h3> 
+    <div id="word-list-container"></div> 
+   </div> 
+   <div class="settings-section" id="settings-section" style="display: none;"> 
+    <div class="settings-option"> 
+     <input type="checkbox" class="check-button" id="developer-mode"> 
+     <label for="developer-mode">Enable Developer Mode</label> 
+    </div> 
+    <div class="settings-option"> 
+     <button class="menu-button" onclick="setBasicMode()">Basic</button> 
+     <button class="menu-button" onclick="setAdvancedMode()">Advanced</button> 
+    </div> 
+    <div class="settings-option dropdown" id="multiple-words-dropdown" style="display: none;"> 
+     <label for="multiple-words-option">Select Words:</label> 
+     <select id="multiple-words-option" onchange="handleMultipleWordsOptionChange()"> <option value="singular">Singular Words</option> <option value="multiple">Multiple Words</option> </select> 
+    </div> 
+    <div class="settings-option number-input" id="number-of-words-input" style="display: none;"> 
+     <label for="number-of-words">Number of Words:</label> 
+     <input type="number" id="number-of-words" min="1" max="10" placeholder="Enter number of words"> 
+     <button class="add-word-button" onclick="generateWordInputs()">Generate</button> 
+    </div> 
+    <div class="settings-option word-input-group" id="word-input-group" style="display: none;"></div> 
+    <button class="share-button" onclick="share()">Share</button> 
+   </div> 
+  </div> 
+  <script>
+    var fromLanguage = "";
+    var toLanguage = "";
+    var wordCount = 1;
+    var basicMode = false;
+    var advancedMode = false;
+
+    function addWord() {
+      var fromLanguageInput = document.getElementById('from-language');
+      var toLanguageInput = document.getElementById('to-language');
+      var fromLanguageWord = fromLanguageInput.value;
+      var toLanguageWord = toLanguageInput.value;
+
+      if (fromLanguageWord === "" || toLanguageWord === "") {
+        alert("Please enter both words.");
+        return;
+      }
+
+      // Generate the variable names dynamically
+      var fromLanguageWordVariable = "fromLanguageWord" + wordCount;
+      var toLanguageWordVariable = "toLanguageWord" + wordCount;
+
+      // Assign the values to the dynamic variables
+      window[fromLanguageWordVariable] = fromLanguageWord;
+      window[toLanguageWordVariable] = toLanguageWord;
+
+      // Add words to the word list
+      var wordListContainer = document.getElementById('word-list-container');
+      var wordListItem = document.createElement('div');
+      wordListItem.className = 'word-list-item';
+      wordListItem.textContent = 'From ' + fromLanguage + ': ' + window[fromLanguageWordVariable] + ', To ' + toLanguage + ': ' + window[toLanguageWordVariable];
+      wordListContainer.appendChild(wordListItem);
+
+      // Clear the input fields
+      fromLanguageInput.value = "";
+      toLanguageInput.value = "";
+
+      // Increment word count
+      wordCount++;
+    }
+
+    function toggleSettings() {
+      var settingsSection = document.getElementById('settings-section');
+      if (settingsSection.style.display === "none") {
+        settingsSection.style.display = "block";
+      } else {
+        settingsSection.style.display = "none";
+      }
+    }
+
+    function setBasicMode() {
+      basicMode = true;
+      advancedMode = false;
+      console.log("Basic Mode: " + basicMode);
+      console.log("Advanced Mode: " + advancedMode);
+      hideMultipleWordsDropdown();
+      hideNumberOfWordsInput();
+      hideWordInputGroup();
+    }
+
+    function setAdvancedMode() {
+      basicMode = false;
+      advancedMode = true;
+      console.log("Basic Mode: " + basicMode);
+      console.log("Advanced Mode: " + advancedMode);
+      showMultipleWordsDropdown();
+      hideNumberOfWordsInput();
+      hideWordInputGroup();
+    }
+
+    function handleMultipleWordsOptionChange() {
+      var multipleWordsOption = document.getElementById('multiple-words-option').value;
+      if (multipleWordsOption === 'multiple') {
+        showNumberOfWordsInput();
+      } else {
+        hideNumberOfWordsInput();
+      }
+    }
+
+    function showMultipleWordsDropdown() {
+      var multipleWordsDropdown = document.getElementById('multiple-words-dropdown');
+      multipleWordsDropdown.style.display = "block";
+    }
+
+    function hideMultipleWordsDropdown() {
+      var multipleWordsDropdown = document.getElementById('multiple-words-dropdown');
+      multipleWordsDropdown.style.display = "none";
+    }
+
+    function showNumberOfWordsInput() {
+      var numberOfWordsInput = document.getElementById('number-of-words-input');
+      numberOfWordsInput.style.display = "block";
+    }
+
+    function hideNumberOfWordsInput() {
+      var numberOfWordsInput = document.getElementById('number-of-words-input');
+      numberOfWordsInput.style.display = "none";
+    }
+
+    function generateWordInputs() {
+      var numberOfWordsInput = document.getElementById('number-of-words');
+      var numberOfWords = parseInt(numberOfWordsInput.value);
+      if (isNaN(numberOfWords) || numberOfWords <= 0) {
+        alert("Please enter a valid number of words.");
+        return;
+      }
+
+      var wordInputGroup = document.getElementById('word-input-group');
+      wordInputGroup.innerHTML = "";
+
+      for (var i = 1; i <= numberOfWords; i++) {
+        var wordInput = document.createElement('div');
+        wordInput.className = 'word-input';
+        var fromLanguageInputLabel = document.createElement('label');
+        fromLanguageInputLabel.textContent = 'From Language Word ' + i;
+        var fromLanguageInput = document.createElement('input');
+        fromLanguageInput.type = 'text';
+        fromLanguageInput.id = 'from-language-word-' + i;
+        fromLanguageInput.placeholder = 'Enter word in from language';
+
+        var toLanguageInputLabel = document.createElement('label');
+        toLanguageInputLabel.textContent = 'To Language Word ' + i;
+        var toLanguageInput = document.createElement('input');
+        toLanguageInput.type = 'text';
+        toLanguageInput.id = 'to-language-word-' + i;
+        toLanguageInput.placeholder = 'Enter word in to language';
+
+        wordInput.appendChild(fromLanguageInputLabel);
+        wordInput.appendChild(fromLanguageInput);
+        wordInput.appendChild(toLanguageInputLabel);
+        wordInput.appendChild(toLanguageInput);
+
+        wordInputGroup.appendChild(wordInput);
+      }
+
+      showWordInputGroup();
+    }
+
+    function showWordInputGroup() {
+      var wordInputGroup = document.getElementById('word-input-group');
+      wordInputGroup.style.display = "block";
+    }
+
+    function hideWordInputGroup() {
+      var wordInputGroup = document.getElementById('word-input-group');
+      wordInputGroup.style.display = "none";
+    }
+
+    function share() {
+      // Placeholder code for sharing functionality
+      alert("Share functionality coming soon!");
+    }
+  </script>   
+ </body>
+</html>
